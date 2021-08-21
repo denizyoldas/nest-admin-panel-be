@@ -1,9 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { MenuService } from './menu.service';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 
-@Controller('menu')
+@ApiTags('Menu')
+@ApiBearerAuth()
+@Controller('api/menu')
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 
@@ -30,5 +41,14 @@ export class MenuController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.menuService.remove(+id);
+  }
+
+  @Post('deleteByIds')
+  @ApiParam({ name: 'ids', type: 'array' })
+  deleteByIds(@Body('ids') ids: number[]) {
+    for (const id of ids) {
+      console.log(id);
+      this.menuService.remove(+id);
+    }
   }
 }
