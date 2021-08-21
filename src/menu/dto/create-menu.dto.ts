@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from '../enum';
 
 export class CreateMenuDto {
   @ApiProperty()
@@ -7,6 +8,6 @@ export class CreateMenuDto {
   @ApiProperty()
   slug: string;
 
-  @ApiProperty()
+  @ApiProperty({ name: 'type', enum: Type })
   type: number;
 }

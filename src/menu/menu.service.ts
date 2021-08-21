@@ -12,6 +12,7 @@ export class MenuService {
   ) {}
 
   create(createMenuDto: CreateMenuDto) {
+    createMenuDto.slug = this.slug(createMenuDto.slug);
     return this.menuRepository.insert(createMenuDto);
   }
 
@@ -29,5 +30,15 @@ export class MenuService {
 
   remove(id: number) {
     this.menuRepository.delete(id);
+  }
+
+  slug(s) {
+    return s
+      .toUpperCase()
+      .toLowerCase()
+      .trim()
+      .normalize('NFD')
+      .replace(/\s+/g, '-')
+      .replace(/[^\w\-]+/g, '');
   }
 }

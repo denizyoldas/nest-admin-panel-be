@@ -10,7 +10,7 @@ import {
 import { MenuService } from './menu.service';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
-import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Menu')
 @ApiBearerAuth()
@@ -41,5 +41,14 @@ export class MenuController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.menuService.remove(+id);
+  }
+
+  @Post('deleteByIds')
+  @ApiParam({ name: 'ids', type: 'array' })
+  deleteByIds(@Body('ids') ids: number[]) {
+    for (const id of ids) {
+      console.log(id);
+      this.menuService.remove(+id);
+    }
   }
 }
