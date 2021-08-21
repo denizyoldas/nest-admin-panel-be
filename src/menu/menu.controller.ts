@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { MenuService } from './menu.service';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
-import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { Type } from './enum';
 
 @ApiTags('Menu')
 @ApiBearerAuth()
@@ -33,7 +35,7 @@ export class MenuController {
     return this.menuService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateMenuDto: UpdateMenuDto) {
     return this.menuService.update(+id, updateMenuDto);
   }
@@ -44,11 +46,36 @@ export class MenuController {
   }
 
   @Post('deleteByIds')
-  @ApiParam({ name: 'ids', type: 'array' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        ids: {
+          type: 'number',
+          format: 'array',
+        },
+      },
+    },
+  })
   deleteByIds(@Body('ids') ids: number[]) {
     for (const id of ids) {
       console.log(id);
       this.menuService.remove(+id);
     }
+  }
+
+  @Patch('changeType/:id')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        type: {
+          type: 'number',
+        },
+      },
+    },
+  })
+  changeType(@Param('id') id: string, @Body('type') type: Type) {
+    this.menuService.changeType(+id, type);
   }
 }
