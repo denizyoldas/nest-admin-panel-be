@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
 import { Menu } from './entities/menu.entity';
+import { Type } from './enum';
 
 @Injectable()
 export class MenuService {
@@ -30,6 +31,15 @@ export class MenuService {
 
   remove(id: number) {
     this.menuRepository.delete(id);
+  }
+
+  changeType(id: number, type: Type) {
+    this.menuRepository
+      .createQueryBuilder()
+      .where('id = :id', { id })
+      .update()
+      .set({ type })
+      .execute();
   }
 
   slug(s) {
