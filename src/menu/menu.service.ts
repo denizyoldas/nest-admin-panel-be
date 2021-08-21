@@ -1,26 +1,54 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
+import { Menu } from './entities/menu.entity';
+import { Type } from './enum';
 
 @Injectable()
 export class MenuService {
+  constructor(
+    @InjectRepository(Menu) private menuRepository: Repository<Menu>,
+  ) {}
+
   create(createMenuDto: CreateMenuDto) {
-    return 'This action adds a new menu';
+    createMenuDto.slug = this.slug(createMenuDto.slug);
+    return this.menuRepository.insert(createMenuDto);
   }
 
   findAll() {
-    return `This action returns all menu`;
+    return this.menuRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} menu`;
+    return this.menuRepository.findOne(id);
   }
 
   update(id: number, updateMenuDto: UpdateMenuDto) {
-    return `This action updates a #${id} menu`;
+    this.menuRepository.update(id, updateMenuDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} menu`;
+    this.menuRepository.delete(id);
+  }
+
+  changeType(id: number, type: Type) {
+    this.menuRepository
+      .createQueryBuilder()
+      .where('id = :id', { id })
+      .update()
+      .set({ type })
+      .execute();
+  }
+
+  slug(s) {
+    return s
+      .toUpperCase()
+      .toLowerCase()
+      .trim()
+      .normalize('NFD')
+      .replace(/\s+/g, '-')
+      .replace(/[^\w\-]+/g, '');
   }
 }

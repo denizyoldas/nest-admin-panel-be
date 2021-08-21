@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from '../enum';
 
-export class CreateMenuDto {
+export class AddChildDto {
   @ApiProperty()
   name: string;
 
