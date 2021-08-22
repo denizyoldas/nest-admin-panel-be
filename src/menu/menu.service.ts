@@ -17,8 +17,9 @@ export class MenuService {
     return this.menuRepository.insert(createMenuDto);
   }
 
-  findAll() {
-    return this.menuRepository.find();
+  async findAll() {
+    const res = await this.menuRepository.find();
+    return res;
   }
 
   findOne(id: number) {

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { MenuChild } from './menu-child.emtity';
 
 @Entity()
 export class Menu {
@@ -13,4 +14,10 @@ export class Menu {
 
   @Column()
   type: number;
+
+  @Column()
+  order?: number;
+
+  @Column({ default: true })
+  isActive: boolean;
 }
