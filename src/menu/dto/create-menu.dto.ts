@@ -8,6 +8,12 @@ export class CreateMenuDto {
   @ApiProperty()
   slug: string;
 
-  @ApiProperty({ name: 'type', enum: Type })
+  @ApiProperty()
   type: number;
+
+  @ApiProperty()
+  order?: number;
+
+  @ApiProperty({ default: true })
+  isActive: boolean;
 }
