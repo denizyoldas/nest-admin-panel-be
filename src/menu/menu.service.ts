@@ -17,9 +17,8 @@ export class MenuService {
     return this.menuRepository.insert(createMenuDto);
   }
 
-  async findAll() {
-    const res = await this.menuRepository.find();
-    return res;
+  findAll() {
+    return this.menuRepository.find({ order: { order: 'ASC' } });
   }
 
   findOne(id: number) {
@@ -39,7 +38,7 @@ export class MenuService {
       .createQueryBuilder()
       .where('id = :id', { id })
       .update()
-      .set({ type })
+      .set({ type, updated: new Date(Date.now()) })
       .execute();
   }
 
